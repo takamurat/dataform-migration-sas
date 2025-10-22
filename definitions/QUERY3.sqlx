@@ -1,0 +1,15 @@
+config {
+    type: "view",
+    schema: "WORK",
+    description: "⑦札幌CCﾊﾟｰﾄｱﾙﾊﾞｲﾄ"
+}
+
+SELECT DISTINCT
+    t1.SHAIN_CD, 
+    t1.SHAIN
+FROM
+    `DWH_IND.DWH_R_MST_SHAIN` t1
+WHERE
+    t1.BUSHO = '札幌ｺｰﾙｾﾝﾀｰ'
+    AND t1.YAKUSHOKU = 'ﾊﾟｰﾄｱﾙﾊﾞｲﾄ'
+    AND t1.SHAIN_CD NOT IN ('5919074', '6844175', '6954164')

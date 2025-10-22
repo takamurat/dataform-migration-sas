@@ -1,0 +1,28 @@
+config {
+    type: "table",
+    schema: "WORK",
+    description: "転置"
+}
+
+SELECT
+    *
+FROM
+    (
+        SELECT
+            WEEK,
+            NITORI_STORE_ZONE_CD,
+            NITORI_STORE_ZONE_NM,
+            NITORI_STORE_AREA_CD1,
+            NITORI_STORE_AREA_NM,
+            POST_CD,
+            POST_NAME,
+            `7ketaSTAFFCD`,
+            SHAIN,
+            JNL_COUNT,
+            `4COUNT_FLG`
+        FROM
+            ${ref("SORTTempTableSorted_2")}
+    ) PIVOT(
+        SUM(JNL_COUNT) AS Column
+        FOR `4COUNT_FLG` IN (1, 2, 3, 4)
+    )

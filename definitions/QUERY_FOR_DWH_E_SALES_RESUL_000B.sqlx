@@ -1,0 +1,84 @@
+config {
+    type: "view",
+    schema: "WORK",
+    description: "⑩追加販売FLG付与"
+}
+
+SELECT
+    t1.WEEK,
+    t1.SLIP_TYPE,
+    t1.NITORI_STORE_ZONE_CD,
+    t1.NITORI_STORE_ZONE_NM,
+    t1.NITORI_STORE_AREA_CD1,
+    t1.NITORI_STORE_AREA_NM,
+    t1.POST_CD,
+    t1.POST_NAME,
+    t1.SALE_DT,
+    t1.`7ketaSTAFFCD`,
+    t1.ITEM_CD,
+    t1.AC_SELLPRC,
+    t1.SALES_QTY,
+    t1.OCR_SALES_AMT_RSLT,
+    t1.JNL_SLIP_KEY,
+    (case
+        when t1.SLIP_TYPE in ('10') and t1.S_CLASS_CD in ('01101','01110','01111','01112','01113','01120','01130',
+        '01131','01140','01141','01142','01151','01152','01401','01402','01479')
+        then t1.SALES_QTY
+        else 0
+        end
+    ) AS FP_BB_FLG,
+    (case
+        when t1.ITEM_CD in ('4060009') then 0
+        when t1.SLIP_TYPE in ('10') and  t1.S_CLASS_CD in ('01180') then t1.SALES_QTY
+        else 0
+        end) AS FP_BS_FLG,
+    (case
+        when  t1.SLIP_TYPE in ('10') and t1.S_CLASS_CD in ('03101','03102','03179','03201','03202','03279','03301',
+        '03302','03303','03379','03401','03402','03403','03479','03501','03502','03579','03601','03602','03679',
+        '03801','03879')
+        then t1.SALES_QTY
+        else 0
+        end) AS SOFA_BB_FLG,
+    (case
+        when t1.SLIP_TYPE in ('10') and  t1.S_CLASS_CD in ('03701') then t1.SALES_QTY
+        else 0
+        end) AS SOFA_BS_FLG,
+    (case
+        when  t1.SLIP_TYPE in ('10') and  t1.S_CLASS_CD in (
+        '05101','05111','05112','05120','05121','05122','05130','05131','05132','05140','05141','05150','05179',
+        '05189','05199','05201','05202','05203','05204','05205','05210','05220','05221','05222','05223','05224',
+        '05230','05240','05250','05260','05279')
+        then t1.SALES_QTY
+        else 0
+        end) AS FD_BB_FLG,
+    (case
+        when  t1.SLIP_TYPE in ('10') and  t1.ITEM_CD in ( '8750194','8750195','8750199') then t1.SALES_QTY
+        else 0
+        end) AS FD_BS_FLG,
+    (case
+        when  t1.SLIP_TYPE in ('10') and  t1.S_CLASS_CD in ( '06150','06152','06250','06252','06350','06374','06420'
+        ,'06470','06703','06704') then t1.SALES_QTY
+        else 0
+        end) AS BP_BB_FLG,
+    (case
+        when  t1.SLIP_TYPE in ('10') and  t1.S_CLASS_CD in ('51402') then t1.SALES_QTY
+        else 0
+        end) AS BP_BS_FLG,
+    (case
+        when  t1.SLIP_TYPE in ('10') and 
+        t2.GRNT_YRS=30 and 
+        t1.S_CLASS_CD in (
+        '03101','03102','03179','03189','03199','03201','03202','03279','03289','03299','03301','03302','03303','03379','03389','03399','03401','03402','03403','03479','03489','03499')
+        then t1.SALES_QTY
+        else 0
+        end) AS AIR_BB_FLG,
+    (case
+        when  t1.SLIP_TYPE in ('10') and  t1.S_CLASS_CD in ('31101') and ( CONTAINS_SUBSTR(t2.ITEM_NAME_KANA, 'エアープラス') or CONTAINS_SUBSTR(t2.ITEM_NAME_KANA, 'ナイロンムートン') ) then t1.SALES_QTY
+        else 0
+        end) AS AIR_BS_FLG
+FROM
+    ${ref("QUERY_FOR_DWH_E_SALES_RESUL_0000")} t1
+INNER JOIN
+    `DWH_IND.DWH_R_MST_ITEM` t2 ON t1.ITEM_CD = t2.ITEM_CD
+WHERE
+    t1.SLIP_TYPE = '10'

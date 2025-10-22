@@ -1,0 +1,37 @@
+config {
+    type: "table",
+    schema: "WORK",
+    description: "中間テーブル"
+}
+
+SELECT DISTINCT
+    t1.MONTH, 
+    t1.WEEK, 
+    t3.SET_ITM_KBN, 
+    t1.NITORI_STORE_ZONE_CD, 
+    t1.NITORI_STORE_ZONE_NM, 
+    t1.NITORI_STORE_AREA_CD1, 
+    t1.NITORI_STORE_AREA_NM, 
+    t1.POST_CD, 
+    t1.POST_NAME, 
+    t1.SALE_DT, 
+    t1.SLIP_NO, 
+    t1.SLIP_ROW, 
+    t1.`7ketaSTAFFCD`, 
+    t2.SHAIN AS SHAIN, 
+    t3.S_CLASS_CD, 
+    t3.SET_ITM_KBN AS SET_ITM_KBN1, 
+    t1.ITEM_CD, 
+    t3.ITEM_NAME_KANA, 
+    t1.AC_SELLPRC, 
+    t1.SALES_QTY, 
+    t1.OCR_SALES_AMT_RSLT, 
+    t1.JNL_SLIP_KEY
+FROM
+    ${ref("QUERY_FOR_DWH_E_SALES_RESUL")} t1,
+    `DWH_IND.DWH_R_MST_ITEM` t3,
+    ${ref("QUERY_FOR_DWH_E_SALES_RESUL3")} t2
+WHERE
+    t1.ITEM_CD = t3.ITEM_CD
+    AND t1.JNL_SLIP_KEY = t2.JNL_SLIP_KEY
+    AND t1.`7ketaSTAFFCD` = t2.`7ketaSTAFFCD`

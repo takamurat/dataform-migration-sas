@@ -1,0 +1,23 @@
+config {
+    type: "table",
+    schema: "WORK",
+    description: "⑨ジャーナル別品目数"
+}
+
+SELECT
+    t1.MONTH,
+    t1.WEEK,
+    t1.NITORI_STORE_ZONE_CD,
+    t1.NITORI_STORE_ZONE_NM,
+    t1.NITORI_STORE_AREA_CD1,
+    t1.NITORI_STORE_AREA_NM,
+    t1.POST_CD,
+    t1.POST_NAME,
+    t1.JNL_SLIP_KEY,
+    COUNT(DISTINCT t1.ITEM_CD) AS ITEM_COUNT,
+    SUM(t1.SALES_QTY) AS QTY,
+    SUM(t1.OCR_SALES_AMT_RSLT) AS M
+FROM
+    ${ref("QUERY_FOR_DWH_E_SALES_RESUL_0002")} t1
+GROUP BY
+    1, 2, 3, 4, 5, 6, 7, 8, 9

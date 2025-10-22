@@ -1,0 +1,54 @@
+config {
+    type: "table",
+    schema: "WORK",
+    description: "★週別_個人別_実績"
+}
+
+SELECT
+    t2.WEEK,
+    t2.NITORI_STORE_ZONE_CD,
+    t2.NITORI_STORE_ZONE_NM,
+    t2.NITORI_STORE_AREA_CD1,
+    t2.NITORI_STORE_AREA_NM,
+    t2.POST_CD,
+    t2.POST_NAME,
+    t2.`7ketaSTAFFCD`,
+    t2.SHAIN,
+    t2.Column_1 AS `1GYO_JNL_COUNT`,
+    t2.Column_2 AS `2GYO_JNL_COUNT`,
+    t2.Column_3 AS `3GYO_JNL_COUNT`,
+    t2.Column_4 AS `4GYO_OVER_JNL_COUNT`,
+    (IFNULL(t2.Column_1, 0) + IFNULL(t2.Column_2, 0) + IFNULL(t2.Column_3, 0) + IFNULL(t2.Column_4, 0)) AS SUM_JNL_COUNT,
+    t1.SUM_of_FP_BS_FLG,
+    t1.SUM_of_FP_BB_FLG,
+    SAFE_DIVIDE(t1.SUM_of_FP_BS_FLG, t1.SUM_of_FP_BB_FLG) AS FP_WARIAI,
+    t1.SUM_of_SOFA_BS_FLG,
+    t1.SUM_of_SOFA_BB_FLG,
+    SAFE_DIVIDE(t1.SUM_of_SOFA_BS_FLG, t1.SUM_of_SOFA_BB_FLG) AS SOFA_WARIAI,
+    t1.SUM_of_FD_BS_FLG,
+    t1.SUM_of_FD_BB_FLG,
+    SAFE_DIVIDE(t1.SUM_of_FD_BS_FLG, t1.SUM_of_FD_BB_FLG) AS FD_WARIAI,
+    t1.SUM_of_BP_BS_FLG,
+    t1.SUM_of_BP_BB_FLG,
+    SAFE_DIVIDE(t1.SUM_of_BP_BS_FLG, t1.SUM_of_BP_BB_FLG) AS BP_WARIAI,
+    t1.SUM_of_AIR_BS_FLG,
+    t1.SUM_of_AIR_BB_FLG,
+    SAFE_DIVIDE(t1.SUM_of_AIR_BS_FLG, t1.SUM_of_AIR_BB_FLG) AS AIR_WARIAI,
+    t3.SUM_of_01_BS_FLG,
+    t3.SUM_of_01_BB_FLG,
+    SAFE_DIVIDE(t3.SUM_of_01_BS_FLG, t3.SUM_of_01_BB_FLG) AS `01WARIAI`,
+    t3.SUM_of_02_BS_FLG,
+    t3.SUM_of_02_BB_FLG,
+    SAFE_DIVIDE(t3.SUM_of_02_BS_FLG, t3.SUM_of_02_BB_FLG) AS `02WARIAI`,
+    t3.SUM_of_03_BS_FLG,
+    t3.SUM_of_03_BB_FLG,
+    SAFE_DIVIDE(t3.SUM_of_03_BS_FLG, t3.SUM_of_03_BB_FLG) AS `03WARIAI`,
+    t3.SUM_of_06_BS_FLG,
+    t3.SUM_of_06_BB_FLG,
+    SAFE_DIVIDE(t3.SUM_of_06_BS_FLG, t3.SUM_of_06_BB_FLG) AS `06WARIAI`
+FROM
+    ${ref("TRNSTRANSPOSED")} t2
+LEFT JOIN
+    ${ref("QUERY_FOR_DWH_E_SALES_RESUL_000F")} t1 ON t2.WEEK = t1.WEEK AND t2.POST_CD = t1.POST_CD AND t2.`7ketaSTAFFCD` = t1.`7ketaSTAFFCD`
+LEFT JOIN
+    ${ref("QUERY_FOR_DWH_E_SALES_RESUL_0016")} t3 ON t2.WEEK = t3.WEEK AND t2.POST_CD = t3.POST_CD AND t2.`7ketaSTAFFCD` = t3.`7ketaSTAFFCD`

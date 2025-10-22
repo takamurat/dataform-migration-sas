@@ -1,0 +1,8 @@
+dataformCoreVersion: 3.0.16
+defaultProject: dev-environment-371006
+defaultDataset: dataform
+defaultLocation: asia-northeast1
+vars: 
+    number: "1234"
+    Prompt_1: "2025-09-21"
+    Prompt_2: "2025-09-15"

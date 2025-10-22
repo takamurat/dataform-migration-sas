@@ -1,0 +1,22 @@
+config {
+    type: "view",
+    schema: "WORK",
+    description: "⑤家具ありJNL_STAFF_札幌CCPA除外"
+}
+
+SELECT DISTINCT
+    t1.JNL_SLIP_KEY, 
+    t1.`7ketaSTAFFCD`, 
+    (case
+        when t1.`7ketaSTAFFCD` = "0000540" then "通販"
+        when t1.SHAIN is null then "セルフレジ"
+        else t1.SHAIN
+    end) AS SHAIN
+FROM
+    ${ref("QUERY_FOR_DWH_E_SALES_RESUL")} t1
+INNER JOIN
+    ${ref("QUERY2")} t2 ON t1.SLIP_NO = t2.SLIP_NO
+LEFT JOIN
+    ${ref("QUERY3")} t3 ON t1.`7ketaSTAFFCD` = t3.SHAIN_CD
+WHERE
+    t3.SHAIN_CD IS NULL

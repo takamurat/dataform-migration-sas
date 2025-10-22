@@ -1,0 +1,18 @@
+config {
+    type: "view",
+    schema: "WORK",
+    description: "Sort for Transpose"
+}
+
+SELECT
+    T.JNL_COUNT,
+    T.`4COUNT_FLG`,
+    T.WEEK,
+    T.NITORI_STORE_ZONE_CD,
+    T.NITORI_STORE_ZONE_NM,
+    T.NITORI_STORE_AREA_CD1,
+    T.NITORI_STORE_AREA_NM,
+    T.POST_CD,
+    T.POST_NAME
+FROM
+    ${ref("QUERY_FOR_DWH_E_SALES_RESUL_0006")} as T

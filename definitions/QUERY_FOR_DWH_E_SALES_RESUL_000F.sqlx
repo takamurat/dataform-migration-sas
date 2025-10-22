@@ -1,0 +1,29 @@
+config {
+    type: "table",
+    schema: "WORK",
+    description: "週別_追加販売集計"
+}
+
+SELECT
+    t1.WEEK,
+    t1.NITORI_STORE_ZONE_CD,
+    t1.NITORI_STORE_ZONE_NM,
+    t1.NITORI_STORE_AREA_CD1,
+    t1.NITORI_STORE_AREA_NM,
+    t1.POST_CD,
+    t1.POST_NAME,
+    t1.`7ketaSTAFFCD`,
+    SUM(t1.FP_BB_FLG) AS SUM_of_FP_BB_FLG,
+    SUM(t1.FP_BS_FLG) AS SUM_of_FP_BS_FLG,
+    SUM(t1.SOFA_BB_FLG) AS SUM_of_SOFA_BB_FLG,
+    SUM(t1.SOFA_BS_FLG) AS SUM_of_SOFA_BS_FLG,
+    SUM(t1.FD_BB_FLG) AS SUM_of_FD_BB_FLG,
+    SUM(t1.FD_BS_FLG) AS SUM_of_FD_BS_FLG,
+    SUM(t1.BP_BB_FLG) AS SUM_of_BP_BB_FLG,
+    SUM(t1.BP_BS_FLG) AS SUM_of_BP_BS_FLG,
+    SUM(t1.AIR_BB_FLG) AS SUM_of_AIR_BB_FLG,
+    SUM(t1.AIR_BS_FLG) AS SUM_of_AIR_BS_FLG
+FROM
+    ${ref("QUERY_FOR_DWH_E_SALES_RESUL_000B")} t1
+GROUP BY
+    1, 2, 3, 4, 5, 6, 7, 8

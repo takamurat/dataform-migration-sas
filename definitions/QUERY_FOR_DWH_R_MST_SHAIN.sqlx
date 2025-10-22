@@ -1,0 +1,13 @@
+config {
+    type: "view",
+    schema: "WORK",
+    description: "⑥役員除外部署社員マスタ"
+}
+
+SELECT DISTINCT
+    t1.SHAIN_CD, 
+    t1.SHAIN
+FROM
+    `DWH_IND.DWH_R_MST_SHAIN` t1
+WHERE
+    t1.SHAIN_CD > '0009999'

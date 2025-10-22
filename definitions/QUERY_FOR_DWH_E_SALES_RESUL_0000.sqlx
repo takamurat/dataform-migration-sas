@@ -1,0 +1,36 @@
+config {
+    type: "table",
+    schema: "WORK",
+    description: "①期間指定_店舗運営部のみ"
+}
+
+SELECT
+    t5.MONTH, 
+    t5.WEEK, 
+    t1.SLIP_TYPE, 
+    t2.NITORI_STORE_ZONE_CD, 
+    t2.NITORI_STORE_ZONE_NM, 
+    t2.NITORI_STORE_AREA_CD1, 
+    t2.NITORI_STORE_AREA_NM, 
+    t2.POST_CD, 
+    t2.POST_NAME, 
+    t1.SALE_DT, 
+    t1.SLIP_NO, 
+    t1.SLIP_ROW, 
+    LEFT(SUBSTR(t1.STAFF_CD,2,7)) AS `7ketaSTAFFCD`, 
+    t4.S_CLASS_CD, 
+    t1.ITEM_CD, 
+    t1.AC_SELLPRC, 
+    t1.SALES_QTY, 
+    t1.OCR_SALES_AMT_RSLT, 
+    t1.JNL_SLIP_KEY
+FROM
+    `DWH_IND.DWH_E_SALES_RESULT` t1
+INNER JOIN
+    ${ref("QUERY_FOR_DWH_R_MST_POST")} t2 ON t1.SALE_POST_CD = t2.POST_CD
+INNER JOIN
+    `DWH_IND.DWH_R_MST_ITEM` t4 ON t1.ITEM_CD = t4.ITEM_CD
+LEFT JOIN
+    `DWH_IND.DWH_R_MST_CALENDAR` t5 ON t1.SALE_DT = t5.DATE
+WHERE
+    t1.SALE_DT >= DATE("${dataform.projectConfig.vars.Prompt_2}") AND t1.SALE_DT <= DATE("${dataform.projectConfig.vars.Prompt_1}")

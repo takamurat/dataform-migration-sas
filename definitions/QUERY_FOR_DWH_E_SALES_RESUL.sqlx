@@ -1,0 +1,36 @@
+config {
+    type: "view",
+    schema: "WORK",
+    description: "③87-99分類除外_0円除外_540除外_社員名付与"
+}
+
+SELECT
+    t1.MONTH,
+    t1.WEEK,
+    t1.NITORI_STORE_ZONE_CD,
+    t1.NITORI_STORE_ZONE_NM,
+    t1.NITORI_STORE_AREA_CD1,
+    t1.NITORI_STORE_AREA_NM,
+    t1.POST_CD,
+    t1.POST_NAME,
+    t1.SALE_DT,
+    t1.SLIP_NO,
+    t1.SLIP_ROW,
+    t1.`7ketaSTAFFCD`,
+    t3.SHAIN,
+    t1.S_CLASS_CD,
+    t1.ITEM_CD,
+    t1.AC_SELLPRC,
+    t1.SALES_QTY,
+    t1.OCR_SALES_AMT_RSLT,
+    t1.JNL_SLIP_KEY
+FROM
+    ${ref("QUERY_FOR_DWH_E_SALES_RESUL_0000")} t1
+LEFT JOIN
+    ${ref("QUERY_FOR_DWH_R_MST_SHAIN")} t3 ON t1.`7ketaSTAFFCD` = t3.SHAIN_CD
+WHERE
+    t1.OCR_SALES_AMT_RSLT != 0
+    AND t1.`7ketaSTAFFCD` != '0000540'
+    AND t1.SLIP_TYPE = '10'
+    AND t1.S_CLASS_CD NOT BETWEEN '87000' AND '99999'
+    AND NOT STARTS_WITH(t1.ITEM_CD, '9901')

@@ -1,0 +1,27 @@
+config {
+    type: "table",
+    schema: "WORK",
+    description: "週別_重点販売集計"
+}
+
+SELECT
+    t1.WEEK,
+    t1.NITORI_STORE_ZONE_CD,
+    t1.NITORI_STORE_ZONE_NM,
+    t1.NITORI_STORE_AREA_CD1,
+    t1.NITORI_STORE_AREA_NM,
+    t1.POST_CD,
+    t1.POST_NAME,
+    t1.`7ketaSTAFFCD`,
+    SUM(t1.`01_BS_FLG`) AS SUM_of_01_BS_FLG,
+    SUM(t1.`01_BB_FLG`) AS SUM_of_01_BB_FLG,
+    SUM(t1.`02_BS_FLG`) AS SUM_of_02_BS_FLG,
+    SUM(t1.`02_BB_FLG`) AS SUM_of_02_BB_FLG,
+    SUM(t1.`03_BS_FLG`) AS SUM_of_03_BS_FLG,
+    SUM(t1.`03_BB_FLG`) AS SUM_of_03_BB_FLG,
+    SUM(t1.`06_BS_FLG`) AS SUM_of_06_BS_FLG,
+    SUM(t1.`06_BB_FLG`) AS SUM_of_06_BB_FLG
+FROM
+    ${ref("QUERY_FOR_DWH_E_SALES_RESUL_0015")} t1
+GROUP BY
+    1, 2, 3, 4, 5, 6, 7, 8

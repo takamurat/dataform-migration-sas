@@ -1,0 +1,13 @@
+config {
+    type: "view",
+    schema: "WORK",
+    description: "④家具あり伝票FLG"
+}
+
+SELECT DISTINCT
+    t1.SLIP_NO, 
+    1 AS KAG_JNL_FLG
+FROM
+    ${ref("QUERY_FOR_DWH_E_SALES_RESUL")} t1
+WHERE
+    t1.S_CLASS_CD BETWEEN '00000' AND '09999'
